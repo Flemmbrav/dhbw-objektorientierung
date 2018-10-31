@@ -20,7 +20,7 @@ public:
 	Gosu::Image img;
 	virtual ~gameobject() {};
 	gameobject(Vektor2d pos, std::string img);
-	virtual void draw() {};
+	virtual void draw()=0;
 };
 
 
