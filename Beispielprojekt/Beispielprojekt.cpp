@@ -35,7 +35,7 @@ auto menu_text_colour = Gosu::Color(0xFFAAAAAA);
 auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
 std::string fontname = "SolomonS.ttf";
 
-// FICK DIE WELT
+// FICK DIE WELT OK
 
 
 
