@@ -326,7 +326,7 @@ public:
 
 		//mein_player.draw();
 
-		for (auto gameobject : vec_gameobject)
+		for (auto v : vec_gameobject)
 		{
 			gameobject.draw();
 		}
