@@ -174,7 +174,7 @@ public:
 		planets.push_back(Planet({ 200.0, 200.0 }, 0.1, "planet1.png"));
 		planets.push_back(Planet({ 600.0, 200.0 }, 0.1, "planet2.png"));*/
 		//planets.push_back(Planet({ 400.0, 500.0 }, 0.1, "planet3.png"));
-		//test23.push_back(player({ 100.0, 100.0 }, "planet1.png", 15));
+		vec_gameobject.push_back({ &player({ 100.0, 100.0 }, "planet1.png", 15) });
 
 	}
 
@@ -328,8 +328,12 @@ public:
 
 		for (auto v : vec_gameobject)
 		{
-			gameobject.draw();
+			for (auto gameobject : v)
+			{
+				gameobject->draw();
+			}
 		}
+		
 	}
 
 	//std::vector<std::vector<gameobject>> everything_that_moves;
@@ -337,7 +341,7 @@ public:
 
 	//player mein_player = { { 100,100 }, "planet1.png", 10 };
 
-	std::vector<std::vector<gameobject>> vec_gameobject;
+	std::vector<std::vector<gameobject*>> vec_gameobject;
 
 	//	std::vector<std::vector<barrier>> vec_barrier;
 	//	std::vector<std::vector<power_up>> vec_power_up;

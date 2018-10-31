@@ -24,7 +24,7 @@ player::player(Vektor2d pos, std::string img, uint8_t rad): gameobject(pos,img),
 }
 
 void player::draw(){
-	gameobject::draw();
+	//gameobject::draw();
 	Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFFFFFF00), 10);
 }
 
