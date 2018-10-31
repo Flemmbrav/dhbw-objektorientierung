@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+#include <memory>
 
 #include "Planet.h"
 #include "Vektor2d.h"
@@ -174,7 +175,11 @@ public:
 		planets.push_back(Planet({ 200.0, 200.0 }, 0.1, "planet1.png"));
 		planets.push_back(Planet({ 600.0, 200.0 }, 0.1, "planet2.png"));*/
 		//planets.push_back(Planet({ 400.0, 500.0 }, 0.1, "planet3.png"));
-		vec_gameobject.push_back({ &player({ 100.0, 100.0 }, "planet1.png", 15) });
+		player p(player({ 100.0, 100.0 }, "planet1.png", 15));
+		auto player_ptr = std::make_unique<player>(p);
+		std::vector<std::unique_ptr<gameobject>> v;
+		v.push_back(move(player_ptr));
+		vec_gameobject.push_back(move(v));
 
 	}
 
@@ -326,11 +331,11 @@ public:
 
 		//mein_player.draw();
 
-		for (auto v : vec_gameobject)
+		for (auto& v : vec_gameobject)
 		{
-			for (auto gameobject : v)
+			for (auto& g : v)
 			{
-				gameobject->draw();
+				g->draw();
 			}
 		}
 		
@@ -341,7 +346,7 @@ public:
 
 	//player mein_player = { { 100,100 }, "planet1.png", 10 };
 
-	std::vector<std::vector<gameobject*>> vec_gameobject;
+	std::vector<std::vector<std::unique_ptr<gameobject>>> vec_gameobject;
 
 	//	std::vector<std::vector<barrier>> vec_barrier;
 	//	std::vector<std::vector<power_up>> vec_power_up;
