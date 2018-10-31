@@ -24,8 +24,8 @@ int8_t in_menu_highlighted = 0;
 uint8_t debounce = 0;
 
 static uint16_t window_size_x = 1280;
-static uint16_t window_size_y = 720	;
-static double offset = double(window_size_y/100);
+static uint16_t window_size_y = 720;
+static double offset = double(window_size_y / 100);
 
 auto game_window_colour = Gosu::Color(0xFF333333);
 auto frame_colour = Gosu::Color(0xFF333333);
@@ -35,7 +35,7 @@ auto menu_text_colour = Gosu::Color(0xFFAAAAAA);
 auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
 std::string fontname = "SolomonS.ttf";
 
-
+// FICK DIE WELT
 
 
 
@@ -123,7 +123,7 @@ std::string fontname = "SolomonS.ttf";
 		virtual ~x_up() override {};
 		x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::string &);
 //		virtual void draw() override;
-		
+
 		void draw() override {
 			Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFF00FF00), 10);
 		}
@@ -156,7 +156,7 @@ std::string fontname = "SolomonS.ttf";
 
 
 
-	
+
 
 class GameWindow : public Gosu::Window
 {
@@ -165,7 +165,7 @@ public:
 	Gosu::Image img;
 	GameWindow()
 		: Window(window_size_x, window_size_y)
-		, font(window_size_y/10, fontname, 1)
+		, font(window_size_y / 10, fontname, 1)
 		, img("sfw2.png")
 	{
 		set_caption("Anime Tiddies");
@@ -272,13 +272,13 @@ public:
 			// Back
 			font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
 			img.draw(0.0, 0.0, 0.0, 1, 1);
-			
+
 		}
 		if (in_menu == 4)
 		{
 			// New Score
-			font.draw("Your score: "+ std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Add your name and press Return" , double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+			font.draw("Your score: " + std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+			font.draw("Add your name and press Return", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
 			// Back
 			font.draw("Show Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
 		}
@@ -325,24 +325,30 @@ public:
 		//	Planet.draw();}
 
 		//mein_player.draw();
+
+		for (auto gameobject : vec_gameobject)
+		{
+			gameobject.draw();
+		}
 	}
 
 	//std::vector<std::vector<gameobject>> everything_that_moves;
 	//std::vector<Planet> planets;
 
 	//player mein_player = { { 100,100 }, "planet1.png", 10 };
-	
 
-	std::vector<std::vector<barrier>> vec_barrier;
-	std::vector<std::vector<power_up>> vec_power_up;
-	std::vector<std::vector<star>> vec_star;
-	std::vector<std::vector<obstacle>> vec_obstacle;
-	std::vector<std::vector<player>> vec_player;
+	std::vector<std::vector<gameobject>> vec_gameobject;
+
+	//	std::vector<std::vector<barrier>> vec_barrier;
+	//	std::vector<std::vector<power_up>> vec_power_up;
+	//	std::vector<std::vector<star>> vec_star;
+	//	std::vector<std::vector<obstacle>> vec_obstacle;
+	//	std::vector<std::vector<player>> vec_player;
 
 
 
 
-	// Wird 60x pro Sekunde aufgerufen
+		// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
 		// Debounce
@@ -355,7 +361,7 @@ public:
 		}
 
 		// Menu
-		if(in_menu)
+		if (in_menu)
 		{
 
 			// Main Menu
@@ -363,10 +369,12 @@ public:
 			{
 				if (input().down(Gosu::KB_UP) && debounce == 0) {
 					in_menu_highlighted--;
-					debounce = 1;}
+					debounce = 1;
+				}
 				if (input().down(Gosu::KB_DOWN) && debounce == 0) {
 					in_menu_highlighted++;
-					debounce = 2;}
+					debounce = 2;
+				}
 
 				if (in_menu_highlighted > 2) in_menu_highlighted = 0;
 				if (in_menu_highlighted < 0) in_menu_highlighted = 2;
@@ -436,7 +444,7 @@ public:
 				//std::vector<std::vector<gameobject>> everything_that_moves;
 
 				/*
-				
+
 				Die Logik:
 					Wände:
 						Wenn in x Blockreihen nur eine Wand ist => spawne mit y Wahrscheinlichkeit eine neue
@@ -451,7 +459,7 @@ public:
 							Total maximal y Malus
 
 							Maximal z Malus pro Block
-				
+
 					X-Anhängen:
 						Werden einfach zufällig verteilt, jedoch y plusminus z mal so viel X-Anhängen wie Mali von der vorherigen Blockreihe zur nächsten
 
@@ -467,7 +475,7 @@ public:
 
 				*/
 
-				
+
 			}
 
 
@@ -520,4 +528,4 @@ int main()
 {
 	GameWindow window;
 	window.show();
-}	
+}
