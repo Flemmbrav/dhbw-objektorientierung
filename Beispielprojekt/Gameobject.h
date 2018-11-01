@@ -65,7 +65,7 @@ public:
 	uint8_t rad;
 	Gosu::Font font;
 	virtual ~x_up() override {};
-	x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::string &);
+	x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::string&);
 	virtual void draw() override;
 };
 

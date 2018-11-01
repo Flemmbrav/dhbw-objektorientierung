@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <memory>
 
-#include "Planet.h"
+#include "Gameobject.h"
 #include "Vektor2d.h"
 
 // Simulationsgeschwindigkeit
@@ -175,10 +175,22 @@ public:
 		planets.push_back(Planet({ 200.0, 200.0 }, 0.1, "planet1.png"));
 		planets.push_back(Planet({ 600.0, 200.0 }, 0.1, "planet2.png"));*/
 		//planets.push_back(Planet({ 400.0, 500.0 }, 0.1, "planet3.png"));
-		player p(player({ 100.0, 100.0 }, "planet1.png", 15));
+		player p(player({ 100.0, 100.0 }, "player.png", 15));
+		obstacle o(obstacle({ 200.0, 200.0 }, "box.png", 20, 20, fontname));
+		barrier b(barrier({ 400, 400 }, "planet1.png", 2, 300));
+		x_up x(x_up({ 600, 600 }, "powerup_x_up.png", 2, 20, fontname));
+		star s(star({ 650, 600 }, "powerup_star.png", 2, 300));
 		auto player_ptr = std::make_unique<player>(p);
+		auto obstacle_ptr = std::make_unique<obstacle>(o);
+		auto barrier_ptr = std::make_unique<barrier>(b);
+		auto x_up_ptr = std::make_unique<x_up>(x);
+		auto star_ptr = std::make_unique<star>(s);
 		std::vector<std::unique_ptr<gameobject>> v;
 		v.push_back(move(player_ptr));
+		v.push_back(move(obstacle_ptr));
+		v.push_back(move(barrier_ptr));
+		v.push_back(move(x_up_ptr));
+		v.push_back(move(star_ptr));
 		vec_gameobject.push_back(move(v));
 
 	}

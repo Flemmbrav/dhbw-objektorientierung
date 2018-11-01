@@ -1,5 +1,8 @@
 #include "stdafx.h"
-#include "Planet.h"
+#include "Gameobject.h"
+#include <Gosu\Image.hpp>
+#include <Gosu\Font.hpp>
+#include <Gosu\Graphics.hpp>
 
 Planet::Planet(Vektor2d pos, double mass, std::string img)
 	: pos(pos)
@@ -10,6 +13,7 @@ Planet::Planet(Vektor2d pos, double mass, std::string img)
 }
 
 void Planet::draw() {
+	
 	img.draw_rot(pos.get_x(), pos.get_y(), 0.0, 0.0, 0.5, 0.5, 0.1, 0.1);
 }
 //***************************************** gameobject *****************************************
@@ -24,8 +28,8 @@ player::player(Vektor2d pos, std::string img, uint8_t rad): gameobject(pos,img),
 }
 
 void player::draw(){
-	//gameobject::draw();
-	Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFFFFFF00), 10);
+	//Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFFFFFF00), 10);
+	img.draw(pos.get_x(), pos.get_y(), 10, 0.1, 0.1);
 }
 
 //***************************************** barrier *****************************************
@@ -35,6 +39,7 @@ barrier::barrier(Vektor2d pos, std::string img, uint8_t wid, uint8_t hig): gameo
 
 void barrier::draw() {
 	Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), wid, hig, Gosu::Color(0xFF0000FF), 10);
+	
 }
 
 //***************************************** obstacle *****************************************
@@ -43,7 +48,8 @@ obstacle::obstacle(Vektor2d pos, std::string img, uint8_t val, uint8_t wid, cons
 }
 
 void obstacle::draw() {
-	Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), wid, wid, Gosu::Color(0xFFFF00FF), 10);
+	//Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), wid, wid, Gosu::Color(0xFFFF00FF), 10);
+	img.draw(pos.get_x(), pos.get_y(), 10, 0.1, 0.1);
 }
 
 //***************************************** power_up *****************************************
@@ -57,7 +63,8 @@ x_up::x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::s
 }
 
 void x_up::draw() {
-	Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFF00FF00), 10);
+	//Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFF00FF00), 10);
+	img.draw(pos.get_x(), pos.get_y(), 10, 0.1, 0.1);
 }
 
 //***************************************** star *****************************************
@@ -66,8 +73,9 @@ star::star(Vektor2d pos, std::string img, uint8_t dur, uint8_t wid) : power_up(p
 }
 
 void star::draw() {
-	Gosu::Graphics::draw_triangle((pos.get_x() + wid / 2), pos.get_y(), Gosu::Color(0xFFFFFF00), pos.get_x(), (pos.get_y() + wid), Gosu::Color(0xFFFFFF00), (pos.get_x() + wid), (pos.get_y() + wid), Gosu::Color(0xFFFFFF00), 10);
-	Gosu::Graphics::draw_triangle((pos.get_x()), pos.get_y(), Gosu::Color(0xFFFFFF00), (pos.get_x()+ wid), pos.get_y(), Gosu::Color(0xFFFFFF00), (pos.get_x() + wid/2), (pos.get_y() + wid), Gosu::Color(0xFFFFFF00), 10);
+	img.draw(pos.get_x(), pos.get_y(), 10, 0.1, 0.1);
+	//Gosu::Graphics::draw_triangle(pos.get_x(), pos.get_y()+(wid*2/10), Gosu::Color(0xFFFFFFFF), pos.get_x()+ wid, pos.get_y()+(wid * 2 / 10), Gosu::Color(0xFFFFFFFF), pos.get_x() + wid/2, pos.get_y() + wid, Gosu::Color(0xFFFFFFFF), 10);
+	//Gosu::Graphics::draw_triangle(pos.get_x()+wid/2, pos.get_y(), Gosu::Color(0xFFFFFFFF), pos.get_x(), pos.get_y()+ (wid * 8 / 10), Gosu::Color(0xFFFFFFFF), pos.get_x() + wid, pos.get_y()+ (wid * 8 / 10), Gosu::Color(0xFFFFFFFF), 10);
 }
 
 
