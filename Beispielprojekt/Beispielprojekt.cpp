@@ -36,127 +36,6 @@ auto menu_text_colour = Gosu::Color(0xFFAAAAAA);
 auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
 std::string fontname = "SolomonS.ttf";
 
-// FICK DIE WELT OK
-
-
-
-/*
-
-
-
-
-
-	struct Planet {
-		Vektor2d pos;
-		double mass;
-		Gosu::Image img;
-		Planet(Vektor2d pos, double mass, std::string img);
-//		void draw();
-		void draw() {
-			img.draw_rot(pos.get_x(), pos.get_y(), 0.0, 0.0, 0.5, 0.5, 0.1, 0.1);
-		}
-	};
-
-	class gameobject {
-	public:
-		Vektor2d pos;
-		Gosu::Image img;
-		virtual ~gameobject() {};
-		gameobject(Vektor2d pos, std::string img);
-		virtual void draw() {};
-	};
-
-
-	class player :public gameobject {
-	public:
-		uint8_t rad;
-		virtual ~player() override {};
-		player(Vektor2d pos, std::string img, uint8_t rad);
-//		void draw() override;
-
-		void draw() override {
-			Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFFFFFF00), 10);
-			//Gosu::Graphics::draw_rect(0, 0, 100, 100, Gosu::Color(0xFFFFFFFF), 100);
-		}
-
-	};
-
-	class barrier :public gameobject {
-	public:
-		uint8_t wid;
-		uint8_t hig;
-		virtual ~barrier() override {};
-		barrier(Vektor2d pos, std::string img, uint8_t wid, uint8_t hig);
-//		virtual void draw() override;
-
-		void draw() override {
-			Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), wid, hig, Gosu::Color(0xFF0000FF), 10);
-		}
-	};
-
-
-	class obstacle :public gameobject {
-	public:
-		uint8_t val;
-		uint8_t wid;
-		Gosu::Font font;
-		virtual ~obstacle() override {};
-		obstacle(Vektor2d pos, std::string img, uint8_t val, uint8_t len, const std::string &);
-//		virtual void draw() override;
-
-		void draw() override {
-			Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), wid, wid, Gosu::Color(0xFFFF00FF), 10);
-		}
-	};
-
-	class power_up :public gameobject {
-	public:
-		virtual ~power_up() {};
-		power_up(Vektor2d pos, std::string img);
-
-	};
-
-	class x_up :public power_up {
-	public:
-		uint8_t val;
-		uint8_t rad;
-		Gosu::Font font;
-		virtual ~x_up() override {};
-		x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::string &);
-//		virtual void draw() override;
-
-		void draw() override {
-			Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFF00FF00), 10);
-		}
-	};
-
-	class star :public power_up {
-	public:
-		uint8_t dur;
-		uint8_t wid;
-		virtual ~star() override {};
-		star(Vektor2d pos, std::string img, uint8_t dur, uint8_t wid);
-//		virtual void draw() override;
-
-		void draw() override {
-			Gosu::Graphics::draw_triangle((pos.get_x() + wid / 2), pos.get_y(), Gosu::Color(0xFFFFFF00), pos.get_x(), (pos.get_y() + wid), Gosu::Color(0xFFFFFF00), (pos.get_x() + wid), (pos.get_y() + wid), Gosu::Color(0xFFFFFF00), 10);
-			Gosu::Graphics::draw_triangle((pos.get_x()), pos.get_y(), Gosu::Color(0xFFFFFF00), (pos.get_x() + wid), pos.get_y(), Gosu::Color(0xFFFFFF00), (pos.get_x() + wid / 2), (pos.get_y() + wid), Gosu::Color(0xFFFFFF00), 10);
-		}
-	};
-
-
-	*/
-
-
-
-
-
-
-
-
-
-
-
 
 
 class GameWindow : public Gosu::Window
@@ -348,6 +227,7 @@ public:
 			for (auto& g : v)
 			{
 				g->draw();
+				g->pos.x = g->pos.x + time;
 			}
 		}
 		

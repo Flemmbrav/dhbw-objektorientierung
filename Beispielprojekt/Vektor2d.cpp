@@ -27,6 +27,7 @@ double Vektor2d::get_y() const
 	return y;
 }
 
+
 Vektor2d Vektor2d::operator+(const Vektor2d& other) const
 {
 	return Vektor2d(other.x + x, other.y + y);
