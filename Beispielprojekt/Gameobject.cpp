@@ -29,7 +29,7 @@ player::player(Vektor2d pos, std::string img, uint8_t rad): gameobject(pos,img),
 
 void player::draw(){
 	//Gosu::Graphics::draw_rect(pos.get_x(), pos.get_y(), 2 * rad, 2 * rad, Gosu::Color(0xFFFFFF00), 10);
-	img.draw(pos.get_x(), pos.get_y(), 10, 0.1, 0.1);
+	img.draw(pos.get_x(), pos.get_y(), 10, 1, 1);
 }
 
 //***************************************** barrier *****************************************
@@ -73,7 +73,7 @@ star::star(Vektor2d pos, std::string img, uint8_t dur, uint8_t wid) : power_up(p
 }
 
 void star::draw() {
-	img.draw(pos.get_x(), pos.get_y(), 10, 0.1, 0.1);
+	img.draw(pos.get_x(), pos.get_y(), 10, 1, 1);
 	//Gosu::Graphics::draw_triangle(pos.get_x(), pos.get_y()+(wid*2/10), Gosu::Color(0xFFFFFFFF), pos.get_x()+ wid, pos.get_y()+(wid * 2 / 10), Gosu::Color(0xFFFFFFFF), pos.get_x() + wid/2, pos.get_y() + wid, Gosu::Color(0xFFFFFFFF), 10);
 	//Gosu::Graphics::draw_triangle(pos.get_x()+wid/2, pos.get_y(), Gosu::Color(0xFFFFFFFF), pos.get_x(), pos.get_y()+ (wid * 8 / 10), Gosu::Color(0xFFFFFFFF), pos.get_x() + wid, pos.get_y()+ (wid * 8 / 10), Gosu::Color(0xFFFFFFFF), 10);
 }

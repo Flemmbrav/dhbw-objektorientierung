@@ -54,7 +54,7 @@ public:
 		planets.push_back(Planet({ 200.0, 200.0 }, 0.1, "planet1.png"));
 		planets.push_back(Planet({ 600.0, 200.0 }, 0.1, "planet2.png"));*/
 		//planets.push_back(Planet({ 400.0, 500.0 }, 0.1, "planet3.png"));
-		player p(player({ 100.0, 100.0 }, "player.png", 15));
+		player p(player({ 500.0, 100.0 }, "player.png", 15));
 		obstacle o(obstacle({ 200.0, 200.0 }, "box.png", 20, 20, fontname));
 		barrier b(barrier({ 400, 400 }, "planet1.png", 2, 300));
 		x_up x(x_up({ 600, 600 }, "powerup_x_up.png", 2, 20, fontname));
