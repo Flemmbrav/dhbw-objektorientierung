@@ -54,7 +54,7 @@ public:
 		planets.push_back(Planet({ 200.0, 200.0 }, 0.1, "planet1.png"));
 		planets.push_back(Planet({ 600.0, 200.0 }, 0.1, "planet2.png"));*/
 		//planets.push_back(Planet({ 400.0, 500.0 }, 0.1, "planet3.png"));
-		player p(player({ 500.0, 100.0 }, "player.png", 15));
+		/*player p(player({ 500.0, 100.0 }, "player.png", 15));
 		obstacle o(obstacle({ 200.0, 200.0 }, "box.png", 20, 20, fontname));
 		barrier b(barrier({ 400, 400 }, "planet1.png", 2, 300));
 		x_up x(x_up({ 600, 600 }, "powerup_x_up.png", 2, 20, fontname));
@@ -70,6 +70,23 @@ public:
 		v.push_back(move(barrier_ptr));
 		v.push_back(move(x_up_ptr));
 		v.push_back(move(star_ptr));
+		vec_gameobject.push_back(move(v));*/
+		obstacle o1(obstacle({ 100.0, 200.0 }, "box.png", 1, 100, fontname));
+		obstacle o2(obstacle({ 200.0, 200.0 }, "box.png", 23, 100, fontname));
+		obstacle o3(obstacle({ 300.0, 200.0 }, "box.png", 45, 100, fontname));
+		obstacle o4(obstacle({ 400.0, 200.0 }, "box.png", 67, 100, fontname));
+		obstacle o5(obstacle({ 500.0, 200.0 }, "box.png", 89, 100, fontname));
+		auto obstacle_ptr1 = std::make_unique<obstacle>(o1);
+		auto obstacle_ptr2 = std::make_unique<obstacle>(o2);
+		auto obstacle_ptr3 = std::make_unique<obstacle>(o3);
+		auto obstacle_ptr4 = std::make_unique<obstacle>(o4);
+		auto obstacle_ptr5 = std::make_unique<obstacle>(o5);
+		std::vector<std::unique_ptr<gameobject>> v;
+		v.push_back(move(obstacle_ptr1));
+		v.push_back(move(obstacle_ptr2));
+		v.push_back(move(obstacle_ptr3));
+		v.push_back(move(obstacle_ptr4));
+		v.push_back(move(obstacle_ptr5));
 		vec_gameobject.push_back(move(v));
 
 	}
@@ -227,7 +244,7 @@ public:
 			for (auto& g : v)
 			{
 				g->draw();
-				g->pos.x = g->pos.x + time;
+				//g->pos.x = g->pos.x + time;
 			}
 		}
 		

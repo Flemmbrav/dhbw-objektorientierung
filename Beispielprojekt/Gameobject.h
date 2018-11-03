@@ -5,6 +5,7 @@
 #include <Gosu\Font.hpp>
 #include <Gosu\Graphics.hpp>
 #include "Vektor2d.h"
+#include <string>
 
 struct Planet {
 	Vektor2d pos;
@@ -46,9 +47,9 @@ class obstacle :public gameobject {
 public:
 	uint8_t val;
 	uint8_t wid;
-	Gosu::Font font;
+	std::string font;
 	virtual ~obstacle() override {};
-	obstacle(Vektor2d pos, std::string img, uint8_t val, uint8_t len, const std::string &);
+	obstacle(Vektor2d pos, std::string img, uint8_t val, uint8_t len, const std::string & f);
 	virtual void draw() override;
 };
 
