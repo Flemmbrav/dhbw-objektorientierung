@@ -34,7 +34,7 @@ auto scoreboard_colour = Gosu::Color(0xFF333333);
 auto scoreboard_text_colour = Gosu::Color(0xFFAAAAAA);
 auto menu_text_colour = Gosu::Color(0xFFAAAAAA);
 auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
-std::string fontname = "SolomonS.ttf";
+std::string fontname = "font/SolomonS.ttf";
 
 
 
@@ -71,7 +71,7 @@ public:
 		v.push_back(move(x_up_ptr));
 		v.push_back(move(star_ptr));
 		vec_gameobject.push_back(move(v));*/
-		obstacle o1(obstacle({ 100.0, 200.0 }, "box.png", 1, 100, fontname));
+		obstacle o1(obstacle({ 100.0, 200.0 }, "box.png", 01, 100, fontname));
 		obstacle o2(obstacle({ 200.0, 200.0 }, "box.png", 23, 100, fontname));
 		obstacle o3(obstacle({ 300.0, 200.0 }, "box.png", 45, 100, fontname));
 		obstacle o4(obstacle({ 400.0, 200.0 }, "box.png", 67, 100, fontname));

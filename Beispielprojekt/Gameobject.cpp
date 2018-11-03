@@ -62,7 +62,7 @@ void obstacle::draw() {
 	}
 	img.draw(pos.get_x(), pos.get_y(), 10, 1, 1, color);
 	
-	font.draw(std::to_string(val), pos.get_x(), pos.get_y(), 11, 1, 1, Gosu::Color(0xFF000000));
+	font.draw(std::to_string(val), pos.get_x(), pos.get_y()+wid/3, 11, 1, 1, Gosu::Color(0xFF000000));
 
 }
 
