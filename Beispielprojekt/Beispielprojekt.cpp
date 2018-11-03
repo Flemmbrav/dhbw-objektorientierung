@@ -135,116 +135,70 @@ public:
 
 		}
 
-		//Menu
-		if (in_menu == 1)
+		// Menu
 		{
-			// New Game
-			if (in_menu_highlighted == 0) font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_highlight_colour);
-			else font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_colour);
-			// Highscores
-			if (in_menu_highlighted == 1) font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_highlight_colour);
-			else font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
-			// Credits
-			if (in_menu_highlighted == 2) font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-			else font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_colour);
-			// Debugging
-			//font.draw(std::to_string(in_menu_highlighted), double(window_size_x) * 1 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
-			//font.draw(std::to_string(in_menu), double(window_size_x) * 2 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
-		}
-		if (in_menu == 2)
-		{
-			// Highscores
-			font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("?XD wer spielt denn sowas", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
-			// Back
-			font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-		}
-		if (in_menu == 3)
-		{
-			// Credits
-			font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Enrico Milione", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Nils Hanebuth", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
-			// Back
-			font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-			img.draw(0.0, 0.0, 0.0, 1, 1);
-
-		}
-		if (in_menu == 4)
-		{
-			// New Score
-			font.draw("Your score: " + std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Add your name and press Return", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
-			// Back
-			font.draw("Show Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-		}
-
-
-
-
-		/*
-		bild.draw_rot(pos.get_x(), pos.get_y(), 10.0,
-			rot, // Rotationswinkel in Grad
-			0.5, 0.5 // Position der "Mitte"
-		);
-
-		auto g2 = (gravity * 1000000000000.0).log();
-
-		Vektor2d rose(50.0, 50.0);
-		auto g = rose - g2;
-		auto s = rose + speed * 1000.0;
-
-		graphics().draw_line(pos.get_x(), pos.get_y(), Gosu::Color::GREEN, input().mouse_x(), input().mouse_y(), Gosu::Color::GREEN, -10.0);
-		graphics().draw_line(rose.get_x(), rose.get_y(), Gosu::Color::RED, g.get_x(), g.get_y(), Gosu::Color::RED, 10.0);
-		graphics().draw_line(rose.get_x(), rose.get_y(), Gosu::Color::BLUE, s.get_x(), s.get_y(), Gosu::Color::BLUE, 10.0);
-		*//*
-		for (auto player : vec_player*) {
-			player.draw();
-		}
-		for (auto barrier : vec_barrier*) {
-			barrier.draw();
-		}
-		for (auto obstacle : vec_obstacle*) {
-			obstacle.draw();
-		}
-		for (auto star : vec_star*) {
-			star.draw();
-		}
-		for (auto power_up : vec_power_up*) {
-			power_up.draw();
-		}*/
-		/*for (size_t i = 0; i < test23.size(); i++)
-		{
-			test23.at(i).draw();
-		}*/
-		//for (auto Planet : planets) {
-		//	Planet.draw();}
-
-		//mein_player.draw();
-
-		for (auto& v : vec_gameobject)
-		{
-			for (auto& g : v)
+			if (in_menu == 1)
 			{
-				g->draw();
-				g->pos.x = g->pos.x + time;
+				// New Game
+				if (in_menu_highlighted == 0) font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_highlight_colour);
+				else font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_colour);
+				// Highscores
+				if (in_menu_highlighted == 1) font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_highlight_colour);
+				else font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
+				// Credits
+				if (in_menu_highlighted == 2) font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+				else font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_colour);
+				// Debugging
+				//font.draw(std::to_string(in_menu_highlighted), double(window_size_x) * 1 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
+				//font.draw(std::to_string(in_menu), double(window_size_x) * 2 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
+			}
+			if (in_menu == 2)
+			{
+				// Highscores
+				font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("?XD wer spielt denn sowas", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+				// Back
+				font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+			}
+			if (in_menu == 3)
+			{
+				// Credits
+				font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Enrico Milione", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Nils Hanebuth", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
+				// Back
+				font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+				img.draw(0.0, 0.0, 0.0, 1, 1);
+
+			}
+			if (in_menu == 4)
+			{
+				// New Score
+				font.draw("Your score: " + std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Add your name and press Return", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+				// Back
+				font.draw("Show Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+			}
+		}
+
+		// Spielverlauf
+		{
+			for (auto& v : vec_gameobject)
+			{
+				for (auto& g : v)
+				{
+					g->draw();
+					//g->pos.set_x = g->pos.get_x + time;
+					g->pos = { g->pos.get_x + double(time), g->pos.get_y };
+				}
 			}
 		}
 		
 	}
 
-	//std::vector<std::vector<gameobject>> everything_that_moves;
-	//std::vector<Planet> planets;
-
-	//player mein_player = { { 100,100 }, "planet1.png", 10 };
 
 	std::vector<std::vector<std::unique_ptr<gameobject>>> vec_gameobject;
 
-	//	std::vector<std::vector<barrier>> vec_barrier;
-	//	std::vector<std::vector<power_up>> vec_power_up;
-	//	std::vector<std::vector<star>> vec_star;
-	//	std::vector<std::vector<obstacle>> vec_obstacle;
-	//	std::vector<std::vector<player>> vec_player;
 
 
 
