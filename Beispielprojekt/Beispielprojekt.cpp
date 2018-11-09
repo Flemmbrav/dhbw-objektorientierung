@@ -15,26 +15,29 @@
 // Simulationsgeschwindigkeit
 const double DT = 100.0;
 
-uint32_t time = 0;
-uint32_t score = 0;
-uint32_t lives = 0;
+// Gameplay variables
+	uint32_t time = 0;
+	uint32_t score = 0;
+	int32_t lives = 0;
+	double speed = 0;
 
-uint8_t in_menu = 1;
-int8_t in_menu_highlighted = 0;
+	uint8_t in_menu = 1;
+	int8_t in_menu_highlighted = 0;
 
-uint8_t debounce = 0;
+	uint8_t debounce = 0;
 
-static uint16_t window_size_x = 1280;
-static uint16_t window_size_y = 720;
-static double offset = double(window_size_y / 100);
+// Visual constants
+	const static uint16_t window_size_x = 1280;
+	const static uint16_t window_size_y = 720;
+	const static double offset = double(window_size_y / 100);
 
-auto game_window_colour = Gosu::Color(0xFF333333);
-auto frame_colour = Gosu::Color(0xFF333333);
-auto scoreboard_colour = Gosu::Color(0xFF333333);
-auto scoreboard_text_colour = Gosu::Color(0xFFAAAAAA);
-auto menu_text_colour = Gosu::Color(0xFFAAAAAA);
-auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
-std::string fontname = "font/SolomonS.ttf";
+	const auto game_window_colour = Gosu::Color(0xFF333333);
+	const auto frame_colour = Gosu::Color(0xFF333333);
+	const auto scoreboard_colour = Gosu::Color(0xFF333333);
+	const auto scoreboard_text_colour = Gosu::Color(0xFFAAAAAA);
+	const auto menu_text_colour = Gosu::Color(0xFFAAAAAA);
+	const auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
+	const std::string fontname = "font/SolomonS.ttf";
 
 
 
@@ -43,51 +46,15 @@ class GameWindow : public Gosu::Window
 public:
 	Gosu::Font font;
 	Gosu::Image img;
+	player plyr;
 	GameWindow()
 		: Window(window_size_x, window_size_y)
-		, font(window_size_y / 10, fontname, 1)
+		, font(window_size_y / 15, fontname, 1)
 		, img("sfw2.png")
+		, plyr({ window_size_x/10*3+2*offset,window_size_y-window_size_x/10+offset, }, "box.png", window_size_x/20+4*offset)
 	{
 		set_caption("Anime Tiddies");
 
-		/* Erzeuge Planeten
-		planets.push_back(Planet({ 200.0, 200.0 }, 0.1, "planet1.png"));
-		planets.push_back(Planet({ 600.0, 200.0 }, 0.1, "planet2.png"));*/
-		//planets.push_back(Planet({ 400.0, 500.0 }, 0.1, "planet3.png"));
-		/*player p(player({ 500.0, 100.0 }, "player.png", 15));
-		obstacle o(obstacle({ 200.0, 200.0 }, "box.png", 20, 20, fontname));
-		barrier b(barrier({ 400, 400 }, "planet1.png", 2, 300));
-		x_up x(x_up({ 600, 600 }, "powerup_x_up.png", 2, 20, fontname));
-		star s(star({ 650, 600 }, "powerup_star.png", 2, 300));
-		auto player_ptr = std::make_unique<player>(p);
-		auto obstacle_ptr = std::make_unique<obstacle>(o);
-		auto barrier_ptr = std::make_unique<barrier>(b);
-		auto x_up_ptr = std::make_unique<x_up>(x);
-		auto star_ptr = std::make_unique<star>(s);
-		std::vector<std::unique_ptr<gameobject>> v;
-		v.push_back(move(player_ptr));
-		v.push_back(move(obstacle_ptr));
-		v.push_back(move(barrier_ptr));
-		v.push_back(move(x_up_ptr));
-		v.push_back(move(star_ptr));
-		vec_gameobject.push_back(move(v));*/
-		obstacle o1(obstacle({ 100.0, 200.0 }, "box.png", 01, 100, fontname));
-		obstacle o2(obstacle({ 200.0, 200.0 }, "box.png", 23, 100, fontname));
-		obstacle o3(obstacle({ 300.0, 200.0 }, "box.png", 45, 100, fontname));
-		obstacle o4(obstacle({ 400.0, 200.0 }, "box.png", 67, 100, fontname));
-		obstacle o5(obstacle({ 500.0, 200.0 }, "box.png", 89, 100, fontname));
-		auto obstacle_ptr1 = std::make_unique<obstacle>(o1);
-		auto obstacle_ptr2 = std::make_unique<obstacle>(o2);
-		auto obstacle_ptr3 = std::make_unique<obstacle>(o3);
-		auto obstacle_ptr4 = std::make_unique<obstacle>(o4);
-		auto obstacle_ptr5 = std::make_unique<obstacle>(o5);
-		std::vector<std::unique_ptr<gameobject>> v;
-		v.push_back(move(obstacle_ptr1));
-		v.push_back(move(obstacle_ptr2));
-		v.push_back(move(obstacle_ptr3));
-		v.push_back(move(obstacle_ptr4));
-		v.push_back(move(obstacle_ptr5));
-		vec_gameobject.push_back(move(v));
 
 	}
 
@@ -108,6 +75,7 @@ public:
 		in_menu = 0;
 		time = 0;
 		lives = 5;
+		speed = 0;
 	}
 	void highscores()
 	{
@@ -136,8 +104,17 @@ public:
 				draw_quader(double(window_size_x) * 7 / 10 + offset, 0.0 + offset, (double(window_size_x) * 3 / 10) - (2 * offset), double(window_size_y) - 2 * offset, scoreboard_colour, 1.0);
 				// Scoreboard Text
 				font.draw("Score " + std::to_string(score), double(window_size_x) * 7 / 10 + 5 * offset, 5 * offset, 10, 1, 1, scoreboard_text_colour);
-				font.draw("Time " + std::to_string(int(time / 60)), double(window_size_x) * 7 / 10 + 5 * offset, 25 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw("Time " + std::to_string(int(time /*/ 60*/)), double(window_size_x) * 7 / 10 + 5 * offset, 25 * offset, 10, 1, 1, scoreboard_text_colour);
 				font.draw("Lives " + std::to_string(lives), double(window_size_x) * 7 / 10 + 5 * offset, 45 * offset, 10, 1, 1, scoreboard_text_colour);
+			}
+
+			// test
+			for (auto& v : vec_gameobject)
+			{
+				for (auto& g : v)
+				{
+					g->draw();
+				}
 			}
 
 			// Floating Objects
@@ -147,121 +124,66 @@ public:
 
 			// Moveable Object
 			{
-
+				plyr.draw();
 			}
 
 		}
 
 		//Menu
-		if (in_menu == 1)
 		{
-			// New Game
-			if (in_menu_highlighted == 0) font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_highlight_colour);
-			else font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_colour);
-			// Highscores
-			if (in_menu_highlighted == 1) font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_highlight_colour);
-			else font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
-			// Credits
-			if (in_menu_highlighted == 2) font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-			else font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_colour);
-			// Debugging
-			//font.draw(std::to_string(in_menu_highlighted), double(window_size_x) * 1 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
-			//font.draw(std::to_string(in_menu), double(window_size_x) * 2 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
-		}
-		if (in_menu == 2)
-		{
-			// Highscores
-			font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("?XD wer spielt denn sowas", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
-			// Back
-			font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-		}
-		if (in_menu == 3)
-		{
-			// Credits
-			font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Enrico Milione", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Nils Hanebuth", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
-			// Back
-			font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-			img.draw(0.0, 0.0, 0.0, 1, 1);
-
-		}
-		if (in_menu == 4)
-		{
-			// New Score
-			font.draw("Your score: " + std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
-			font.draw("Add your name and press Return", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
-			// Back
-			font.draw("Show Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
-		}
-
-
-
-
-		/*
-		bild.draw_rot(pos.get_x(), pos.get_y(), 10.0,
-			rot, // Rotationswinkel in Grad
-			0.5, 0.5 // Position der "Mitte"
-		);
-
-		auto g2 = (gravity * 1000000000000.0).log();
-
-		Vektor2d rose(50.0, 50.0);
-		auto g = rose - g2;
-		auto s = rose + speed * 1000.0;
-
-		graphics().draw_line(pos.get_x(), pos.get_y(), Gosu::Color::GREEN, input().mouse_x(), input().mouse_y(), Gosu::Color::GREEN, -10.0);
-		graphics().draw_line(rose.get_x(), rose.get_y(), Gosu::Color::RED, g.get_x(), g.get_y(), Gosu::Color::RED, 10.0);
-		graphics().draw_line(rose.get_x(), rose.get_y(), Gosu::Color::BLUE, s.get_x(), s.get_y(), Gosu::Color::BLUE, 10.0);
-		*//*
-		for (auto player : vec_player*) {
-			player.draw();
-		}
-		for (auto barrier : vec_barrier*) {
-			barrier.draw();
-		}
-		for (auto obstacle : vec_obstacle*) {
-			obstacle.draw();
-		}
-		for (auto star : vec_star*) {
-			star.draw();
-		}
-		for (auto power_up : vec_power_up*) {
-			power_up.draw();
-		}*/
-		/*for (size_t i = 0; i < test23.size(); i++)
-		{
-			test23.at(i).draw();
-		}*/
-		//for (auto Planet : planets) {
-		//	Planet.draw();}
-
-		//mein_player.draw();
-
-		for (auto& v : vec_gameobject)
-		{
-			for (auto& g : v)
+			if (in_menu == 1)
 			{
-				g->draw();
-				//g->pos.x = g->pos.x + time;
+				// New Game
+				if (in_menu_highlighted == 0) font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_highlight_colour);
+				else font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_colour);
+				// Highscores
+				if (in_menu_highlighted == 1) font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_highlight_colour);
+				else font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
+				// Credits
+				if (in_menu_highlighted == 2) font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+				else font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_colour);
+				// Debugging
+				//font.draw(std::to_string(in_menu_highlighted), double(window_size_x) * 1 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
+				//font.draw(std::to_string(in_menu), double(window_size_x) * 2 / 10 + 5 * offset, 85 * offset, 10, 1, 1, menu_text_colour);
+			}
+			if (in_menu == 2)
+			{
+				// Highscores
+				font.draw("Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("?XD wer spielt denn sowas", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+				// Back
+				font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+			}
+			if (in_menu == 3)
+			{
+				// Credits
+				font.draw("Credits", double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Enrico Milione", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Nils Hanebuth", double(window_size_x) * 1 / 10 + 5 * offset, 45 * offset, 10, 1, 1, menu_text_colour);
+				// Back
+				font.draw("Back", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+				img.draw(0.0, 0.0, 0.0, 1, 1);
+
+			}
+			if (in_menu == 4)
+			{
+				// New Score
+				font.draw("Your score: " + std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Add your name and press Return", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
+				// Back
+				font.draw("Show Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
+
+
 			}
 		}
+
+
 		
 	}
 
-	//std::vector<std::vector<gameobject>> everything_that_moves;
-	//std::vector<Planet> planets;
-
-	//player mein_player = { { 100,100 }, "planet1.png", 10 };
 
 	std::vector<std::vector<std::unique_ptr<gameobject>>> vec_gameobject;
 
-	//	std::vector<std::vector<barrier>> vec_barrier;
-	//	std::vector<std::vector<power_up>> vec_power_up;
-	//	std::vector<std::vector<star>> vec_star;
-	//	std::vector<std::vector<obstacle>> vec_obstacle;
-	//	std::vector<std::vector<player>> vec_player;
 
 
 
@@ -354,8 +276,25 @@ public:
 		// Gameplay
 		if (!in_menu)
 		{
-			//if (!time % (100-time/1000)) //to be changed
+			if (time%200==0) //to be changed
 			{
+
+				std::vector<std::unique_ptr<gameobject>> v;
+				for (int i = 0; i < 7; i++)
+				{
+					uint8_t a = rand() % 25 + int(time / 10000);
+					if (a > 10) {
+							// Das Spielfeld ist 7/10 breit, bei 7 Reihen passt das ganz gut. 
+						obstacle o1(obstacle({double(2*offset + window_size_x * i / 10) , -window_size_y / 10 }, "box.png", -a, window_size_x/10+2*offset, font));
+						auto obstacle_ptr1 = std::make_unique<obstacle>(o1);
+						v.push_back(move(obstacle_ptr1));
+					}
+				}
+
+				vec_gameobject.push_back(move(v));
+
+
+
 				//rand() % 6 + 1;
 				//std::vector<gameobject> neue_reihe;
 				//neue_reihe.push_back();
@@ -403,18 +342,35 @@ public:
 			// Things The Player Can Do
 			if (input().down(Gosu::KB_RIGHT) && debounce == 0)
 			{
-				debounce = 4;
+				plyr.pos += {2*speed, 0};
+				//debounce = 4;
 			}
 			if (input().down(Gosu::KB_LEFT) && debounce == 0)
 			{
-				debounce = 5;
+				plyr.pos -= {2*speed, 0};
+				//debounce = 5;
 			}
 
 			// Things The Game Does
 			{
 				// Compare Stuff
 				{
-
+					for (int v = 0; v <vec_gameobject.size();)
+					{
+						for (int g = 0; g < vec_gameobject[v].size();)
+						{
+							auto gameobjsize = window_size_x / 10 + 2 * offset;
+							if (vec_gameobject[v][g]->pos.get_x() < plyr.pos.get_x() + gameobjsize && vec_gameobject[v][g]->pos.get_x() > plyr.pos.get_x() - gameobjsize && vec_gameobject[v][g]->pos.get_y() < plyr.pos.get_y() + gameobjsize && vec_gameobject[v][g]->pos.get_y() > plyr.pos.get_y() - gameobjsize)
+							{
+								lives += vec_gameobject[v][g]->getval();
+								vec_gameobject[v].erase(vec_gameobject[v].begin() + g);
+							}
+							else g++;
+						}
+						if (vec_gameobject[v].size()) v++;
+						else vec_gameobject.erase(vec_gameobject.begin() + v);
+						
+					}
 				}
 
 				// Generating Stuff
@@ -425,11 +381,26 @@ public:
 				{
 
 				}
+				// Moving Stuff
+				{
+
+					for (auto& v : vec_gameobject)
+					{
+						for (auto& g : v)
+						{
+							g->pos += {0, speed};
+						}
+					}
+				}
+			}
+			if (vec_gameobject.size()) if (vec_gameobject[0].size()) if (vec_gameobject[0][0]->pos.get_y() > window_size_y * 11 / 10)
+			{
+				vec_gameobject.erase(vec_gameobject.begin());
 			}
 
-
 			time++;
-			lives--;
+			speed = 2 + time / 10000 + time * time / 200000000;
+			//lives--;
 		}
 
 		// Variables
