@@ -69,9 +69,9 @@ class x_up :public power_up {
 public:
 	uint8_t val;
 	uint8_t rad;
-	Gosu::Font font;
+	std::string font;
 	virtual ~x_up() override {};
-	x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::string&);
+	x_up(Vektor2d pos, std::string img, uint8_t val, uint8_t rad, const std::string& f);
 	virtual void draw() override;
 	virtual int8_t getval() override;
 };
