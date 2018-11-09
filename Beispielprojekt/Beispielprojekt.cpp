@@ -74,7 +74,7 @@ public:
 		score = 0;
 		in_menu = 0;
 		time = 0;
-		lives = 5;
+		lives = 100;
 		speed = 0;
 	}
 	void highscores()
@@ -103,9 +103,12 @@ public:
 				// Scoreboard
 				draw_quader(double(window_size_x) * 7 / 10 + offset, 0.0 + offset, (double(window_size_x) * 3 / 10) - (2 * offset), double(window_size_y) - 2 * offset, scoreboard_colour, 1.0);
 				// Scoreboard Text
-				font.draw("Score " + std::to_string(score), double(window_size_x) * 7 / 10 + 5 * offset, 5 * offset, 10, 1, 1, scoreboard_text_colour);
-				font.draw("Time " + std::to_string(int(time /*/ 60*/)), double(window_size_x) * 7 / 10 + 5 * offset, 25 * offset, 10, 1, 1, scoreboard_text_colour);
-				font.draw("Lives " + std::to_string(lives), double(window_size_x) * 7 / 10 + 5 * offset, 45 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw("Score ", double(window_size_x) * 7 / 10 + 5 * offset, 5 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw(std::to_string(score/100), double(window_size_x) * 7 / 10 + 5 * offset, 12 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw("Lives ", double(window_size_x) * 7 / 10 + 5 * offset, 25 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw(std::to_string(lives), double(window_size_x) * 7 / 10 + 5 * offset, 32 * offset, 10, 1, 1, scoreboard_text_colour);
+				//font.draw("Time ", double(window_size_x) * 7 / 10 + 5 * offset, 45 * offset, 10, 1, 1, scoreboard_text_colour);
+				//font.draw(std::to_string(int(time /*/ 60*/)), double(window_size_x) * 7 / 10 + 5 * offset, 52 * offset, 10, 1, 1, scoreboard_text_colour);
 			}
 
 			// test
@@ -168,7 +171,7 @@ public:
 			if (in_menu == 4)
 			{
 				// New Score
-				font.draw("Your score: " + std::to_string(score), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
+				font.draw("Your score: " + std::to_string(score/100), double(window_size_x) * 1 / 10 + 5 * offset, 15 * offset, 10, 1, 1, menu_text_colour);
 				font.draw("Add your name and press Return", double(window_size_x) * 1 / 10 + 5 * offset, 32 * offset, 10, 1, 1, menu_text_colour);
 				// Back
 				font.draw("Show Highscores", double(window_size_x) * 1 / 10 + 5 * offset, 65 * offset, 10, 1, 1, menu_text_highlight_colour);
@@ -342,12 +345,12 @@ public:
 			// Things The Player Can Do
 			if (input().down(Gosu::KB_RIGHT) && debounce == 0)
 			{
-				plyr.pos += {2*speed, 0};
+				if(plyr.pos.get_x() < window_size_x * 13 / 20) plyr.pos += {2*speed, 0};
 				//debounce = 4;
 			}
 			if (input().down(Gosu::KB_LEFT) && debounce == 0)
 			{
-				plyr.pos -= {2*speed, 0};
+				if (plyr.pos.get_x() > window_size_x * 1 / 20) plyr.pos -= {2 * speed, 0};
 				//debounce = 5;
 			}
 
@@ -363,6 +366,7 @@ public:
 							if (vec_gameobject[v][g]->pos.get_x() < plyr.pos.get_x() + gameobjsize && vec_gameobject[v][g]->pos.get_x() > plyr.pos.get_x() - gameobjsize && vec_gameobject[v][g]->pos.get_y() < plyr.pos.get_y() + gameobjsize && vec_gameobject[v][g]->pos.get_y() > plyr.pos.get_y() - gameobjsize)
 							{
 								lives += vec_gameobject[v][g]->getval();
+								//score += speed * 100 * vec_gameobject[v][g]->getval();
 								vec_gameobject[v].erase(vec_gameobject[v].begin() + g);
 							}
 							else g++;
@@ -399,8 +403,10 @@ public:
 			}
 
 			time++;
+			score +=speed;
 			speed = 2 + time / 10000 + time * time / 200000000;
-			//lives--;
+			// Spielende
+			if (lives < 1 && time) post_game();
 		}
 
 		// Variables
@@ -417,4 +423,5 @@ int main()
 {
 	GameWindow window;
 	window.show();
+	std::cout << "Immer an's ikognito Fenster denken!" << std::endl;
 }
