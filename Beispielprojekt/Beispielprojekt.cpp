@@ -19,6 +19,7 @@ const double DT = 100.0;
 	uint32_t time = 0;
 	uint32_t score = 0;
 	int32_t lives = 0;
+	uint32_t star_duration = 0 ;
 	double speed = 0;
 
 	uint8_t in_menu = 1;
@@ -28,10 +29,11 @@ const double DT = 100.0;
 
 // Visual constants
 	const static uint16_t window_size_x = 1280;
-	const static uint16_t window_size_y = 720;
+	const static uint16_t window_size_y = 720 ;
 	const static double offset = double(window_size_y / 100);
 
 	const auto game_window_colour = Gosu::Color(0xFF333333);
+	const auto game_window_colour2 = Gosu::Color(0xFF727272);
 	const auto frame_colour = Gosu::Color(0xFF333333);
 	const auto scoreboard_colour = Gosu::Color(0xFF333333);
 	const auto scoreboard_text_colour = Gosu::Color(0xFFAAAAAA);
@@ -39,24 +41,28 @@ const double DT = 100.0;
 	const auto menu_text_highlight_colour = Gosu::Color(0xFFFFFFFF);
 	const std::string fontname = "font/SolomonS.ttf";
 
-
+	Gosu::Image scoreboard("scoreboard.png");
 
 class GameWindow : public Gosu::Window
 {
 public:
 	Gosu::Font font;
 	Gosu::Image img;
+	
 	player plyr;
 	GameWindow()
 		: Window(window_size_x, window_size_y)
 		, font(window_size_y / 15, fontname, 1)
 		, img("sfw2.png")
-		, plyr({ window_size_x/10*3+2*offset,window_size_y-window_size_x/10+offset, }, "box.png", window_size_x/20+4*offset)
+		//, plyr({ window_size_x/10*3+2*offset,window_size_y-window_size_x/10+offset, }, "player.png", window_size_x/20+4*offset)
+		, plyr({ window_size_x / 10 * 3 + 2 * offset,window_size_y - window_size_x / 10 + offset, }, "player.png", 100)
 	{
 		set_caption("Anime Tiddies");
 
 
 	}
+
+	
 
 	// wird bis zu 60x pro Sekunde aufgerufen.
 	// Wenn die Grafikkarte oder der Prozessor nicht mehr hinterherkommen,
@@ -76,6 +82,7 @@ public:
 		time = 0;
 		lives = 100;
 		speed = 0;
+		star_duration = 0;
 	}
 	void highscores()
 	{
@@ -99,7 +106,17 @@ public:
 			// Background / Scoreboard
 			{
 				// Background
-				draw_quader(0.0 + offset, 0.0 + offset, (double(window_size_x) * 7 / 10) - (2 * offset), double(window_size_y) - 2 * offset, game_window_colour, 1.0);
+				if (star_duration == 0) {
+					draw_quader(0.0 + offset, 0.0 + offset, (double(window_size_x) * 7 / 10) - (2 * offset), double(window_size_y) - 2 * offset, game_window_colour, 1.0);
+				}
+				else {
+					if (time%20 <= 10) {
+						draw_quader(0.0 + offset, 0.0 + offset, (double(window_size_x) * 7 / 10) - (2 * offset), double(window_size_y) - 2 * offset, game_window_colour, 1.0);
+					}
+					else {
+						draw_quader(0.0 + offset, 0.0 + offset, (double(window_size_x) * 7 / 10) - (2 * offset), double(window_size_y) - 2 * offset, game_window_colour2, 1.0);
+					}
+				}
 				// Scoreboard
 				draw_quader(double(window_size_x) * 7 / 10 + offset, 0.0 + offset, (double(window_size_x) * 3 / 10) - (2 * offset), double(window_size_y) - 2 * offset, scoreboard_colour, 1.0);
 				// Scoreboard Text
@@ -107,8 +124,11 @@ public:
 				font.draw(std::to_string(score/100), double(window_size_x) * 7 / 10 + 5 * offset, 12 * offset, 10, 1, 1, scoreboard_text_colour);
 				font.draw("Lives ", double(window_size_x) * 7 / 10 + 5 * offset, 25 * offset, 10, 1, 1, scoreboard_text_colour);
 				font.draw(std::to_string(lives), double(window_size_x) * 7 / 10 + 5 * offset, 32 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw("Star ", double(window_size_x) * 7 / 10 + 5 * offset, 45 * offset, 10, 1, 1, scoreboard_text_colour);
+				font.draw(std::to_string(star_duration), double(window_size_x) * 7 / 10 + 5 * offset, 52 * offset, 10, 1, 1, scoreboard_text_colour);
 				//font.draw("Time ", double(window_size_x) * 7 / 10 + 5 * offset, 45 * offset, 10, 1, 1, scoreboard_text_colour);
 				//font.draw(std::to_string(int(time /*/ 60*/)), double(window_size_x) * 7 / 10 + 5 * offset, 52 * offset, 10, 1, 1, scoreboard_text_colour);
+
 			}
 
 			// test
@@ -136,6 +156,7 @@ public:
 		{
 			if (in_menu == 1)
 			{
+				
 				// New Game
 				if (in_menu_highlighted == 0) font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_highlight_colour);
 				else font.draw("New Game", double(window_size_x) * 1 / 10 + 5 * offset, 25 * offset, 10, 1, 1, menu_text_colour);
@@ -278,14 +299,14 @@ public:
 
 		// Gameplay
 		if (!in_menu)
-		{
-			if (time%200==0) //to be changed
+		{	// OBSTACLE SPAWN
+			if (time%250==0) //to be changed
 			{
 
 				std::vector<std::unique_ptr<gameobject>> v;
 				for (int i = 0; i < 7; i++)
 				{
-					uint8_t a = rand() % 25 + int(time / 10000);
+					uint8_t a = rand() % 100 + int(time / 10000);
 					if (a > 10) {
 							// Das Spielfeld ist 7/10 breit, bei 7 Reihen passt das ganz gut. 
 						obstacle o1(obstacle({double(2*offset + window_size_x * i / 10) , -window_size_y / 10 }, "box.png", -a, window_size_x/10+2*offset, font));
@@ -337,6 +358,60 @@ public:
 
 
 			}
+			// BARRIER SPAWN
+			if (time % 125 == 0) //to be changed
+			{
+
+				std::vector<std::unique_ptr<gameobject>> v;
+				for (int i = 1; i < 7; i++) {
+					uint8_t a = rand() % 100 + int(time / 10000);
+					uint8_t b = rand() % 4 + 2;
+					if (a > 60) {
+						// Das Spielfeld ist 7/10 breit, bei 7 Reihen passt das ganz gut. 
+						barrier o1(barrier({ double(window_size_x * i / 10)-2*offset , -window_size_y / 10 }, "box.png", 28.8 ,b*100));
+						auto barrier_ptr1 = std::make_unique<barrier>(o1);
+						v.push_back(move(barrier_ptr1));
+					}
+				}
+
+				vec_gameobject.push_back(move(v));
+
+
+			}
+			// POWER UP SPAWN 
+			if ((time+125)% 250 == 0) //to be changed
+			{
+
+				std::vector<std::unique_ptr<gameobject>> v;
+				// X_UP SPAWN
+				uint8_t a = rand() % 100 + int(time / 10000);
+				uint8_t b = rand() % 6 + 0;
+				uint8_t c = rand() % 100 + 1;
+				if (a > 10 && c > 50) {
+					// Das Spielfeld ist 7/10 breit, bei 7 Reihen passt das ganz gut. 
+
+					x_up x1(x_up({ double(2 * offset + window_size_x * b / 10) , -window_size_y / 10 }, "powerup_x_up.png", a, double(window_size_x / 10 + 2 * offset), font));
+						
+					auto x_up_ptr1 = std::make_unique<x_up>(x1);
+					v.push_back(move(x_up_ptr1));
+				}
+				// STAR SPAWN
+				else if (a > 10 && c <= 50) {
+					star s1(star({ double(2 * offset + window_size_x * b / 10) , -window_size_y / 10 }, "powerup_star.png", uint8_t(a/10), double(window_size_x / 10 + 2 * offset)));
+					
+					auto star_ptr1 = std::make_unique<star>(s1);
+					v.push_back(move(star_ptr1));
+				}
+				
+
+				vec_gameobject.push_back(move(v));
+
+
+
+
+
+
+			}
 
 
 			// Game Lost
@@ -345,12 +420,12 @@ public:
 			// Things The Player Can Do
 			if (input().down(Gosu::KB_RIGHT) && debounce == 0)
 			{
-				if(plyr.pos.get_x() < window_size_x * 13 / 20) plyr.pos += {2*speed, 0};
+				if(plyr.pos.get_x() < (2*offset + window_size_x * 6 / 10)) plyr.pos += {6*speed, 0};
 				//debounce = 4;
 			}
 			if (input().down(Gosu::KB_LEFT) && debounce == 0)
 			{
-				if (plyr.pos.get_x() > window_size_x * 1 / 20) plyr.pos -= {2 * speed, 0};
+				if (plyr.pos.get_x() > 2*offset) plyr.pos -= {6 * speed, 0};
 				//debounce = 5;
 			}
 
@@ -362,12 +437,29 @@ public:
 					{
 						for (int g = 0; g < vec_gameobject[v].size();)
 						{
-							auto gameobjsize = window_size_x / 10 + 2 * offset;
-							if (vec_gameobject[v][g]->pos.get_x() < plyr.pos.get_x() + gameobjsize && vec_gameobject[v][g]->pos.get_x() > plyr.pos.get_x() - gameobjsize && vec_gameobject[v][g]->pos.get_y() < plyr.pos.get_y() + gameobjsize && vec_gameobject[v][g]->pos.get_y() > plyr.pos.get_y() - gameobjsize)
+							auto gameobjsize = window_size_x / 14+ 2 * offset;
+							if (vec_gameobject[v][g]->pos.get_x() < plyr.pos.get_x() + plyr.getsize() // Hitbox von links
+								&& vec_gameobject[v][g]->pos.get_x() > plyr.pos.get_x() - plyr.getsize() // Hitbox von rechts
+								&& vec_gameobject[v][g]->pos.get_y() < plyr.pos.get_y() + plyr.getsize() // Hitbox von unten?
+								&& vec_gameobject[v][g]->pos.get_y() > plyr.pos.get_y() - plyr.getsize()) // Hitbox von oben? Bruder warum machen diese?
+							
 							{
-								lives += vec_gameobject[v][g]->getval();
-								//score += speed * 100 * vec_gameobject[v][g]->getval();
-								vec_gameobject[v].erase(vec_gameobject[v].begin() + g);
+								if (vec_gameobject[v][g]->is_star()) {
+									star_duration = vec_gameobject[v][g]->getval();
+								}
+								if (star_duration > 0 && vec_gameobject[v][g]->getval() < 0) {
+									vec_gameobject[v].erase(vec_gameobject[v].begin() + g);
+								}
+								else {
+									lives += vec_gameobject[v][g]->getval();
+									//score += speed * 100 * vec_gameobject[v][g]->getval();
+									vec_gameobject[v].erase(vec_gameobject[v].begin() + g);
+								}
+								
+								
+								
+
+
 							}
 							else g++;
 						}
@@ -403,6 +495,9 @@ public:
 			}
 
 			time++;
+			if (star_duration > 0 && (time%60 == 0)) {
+				star_duration--;
+			}
 			score +=speed;
 			speed = 2 + time / 10000 + time * time / 200000000;
 			// Spielende
