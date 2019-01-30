@@ -345,12 +345,12 @@ public:
 			// Things The Player Can Do
 			if (input().down(Gosu::KB_RIGHT) && debounce == 0)
 			{
-				if(plyr.pos.get_x() < window_size_x * 13 / 20) plyr.pos += {2*speed, 0};
+				if(plyr.pos.get_x() < window_size_x * 14 / 20) plyr.pos += {2*speed, 0};
 				//debounce = 4;
 			}
 			if (input().down(Gosu::KB_LEFT) && debounce == 0)
 			{
-				if (plyr.pos.get_x() > window_size_x * 1 / 20) plyr.pos -= {2 * speed, 0};
+				if (plyr.pos.get_x() > window_size_x * 0 / 20) plyr.pos -= {2 * speed, 0};
 				//debounce = 5;
 			}
 
